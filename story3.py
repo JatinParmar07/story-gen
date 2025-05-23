@@ -1,5 +1,5 @@
 import os
-os.environ["STREAMLIT_WATCH_USE_POLLING"] = "true"
+os.environ["STREAMLIT_WATCH_USE_POLLING"] = "true"  
 
 import streamlit as st
 st.set_page_config(page_title="AI Story Generator", layout="centered")
@@ -17,6 +17,7 @@ def load_model():
     return tokenizer, model
 
 tokenizer, model = load_model()
+
 st.title("📚 AI Story Generator")
 st.markdown("Create unique story continuations using GPT-2. Just enter a beginning and select a genre!")
 
@@ -25,7 +26,11 @@ genre = st.selectbox(
     ["Fantasy", "Horror", "Sci-Fi", "Romance", "Comedy", "Adventure", "Mystery", "Historical", "Custom"]
 )
 
-user_input = st.text_area("✏️ Enter the beginning of your story", height=200, placeholder="Once upon a time in a distant land...")
+user_input = st.text_area(
+    "✏️ Enter the beginning of your story", 
+    height=200, 
+    placeholder="Once upon a time in a distant land..."
+)
 
 if st.button("Generate Story ✨") and user_input.strip():
     with st.spinner("Generating..."):
@@ -47,7 +52,7 @@ if st.button("Generate Story ✨") and user_input.strip():
                 no_repeat_ngram_size=2,
                 num_return_sequences=3,
             )
-            
+
         story_options = []
         for i, output in enumerate(outputs):
             story = tokenizer.decode(output, skip_special_tokens=True)
@@ -59,12 +64,10 @@ if st.button("Generate Story ✨") and user_input.strip():
 
         st.session_state["story_options"] = story_options
 
-elif st.session_state.get("story_options"):
-    st.markdown("### 📝 Generated Stories")
-    for i, story_text in enumerate(st.session_state["story_options"]):
-        with st.expander(f"Story {i+1}"):
-            st.write(story_text)
+elif user_input.strip() == "":
+    st.warning("Please enter the beginning of your story to continue.")
 
+if "story_options" in st.session_state:
     selected_index = st.selectbox(
         "Choose a story to download",
         [f"Story {i+1}" for i in range(len(st.session_state["story_options"]))],
@@ -78,6 +81,3 @@ elif st.session_state.get("story_options"):
         file_name="generated_story.txt",
         mime="text/plain"
     )
-
-elif user_input.strip() == "":
-    st.warning("Please enter the beginning of your story to continue.")
