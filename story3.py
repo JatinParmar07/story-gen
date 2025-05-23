@@ -1,4 +1,6 @@
 import streamlit as st
+st.set_page_config(page_title="AI Story Generator", layout="centered")
+
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
@@ -12,8 +14,6 @@ def load_model():
     return tokenizer, model
 
 tokenizer, model = load_model()
-
-st.set_page_config(page_title="AI Story Generator", layout="centered")
 st.title("📚 AI Story Generator")
 st.markdown("Create unique story continuations using GPT-2. Just enter a beginning and select a genre!")
 
