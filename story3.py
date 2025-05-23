@@ -1,6 +1,12 @@
 import os
 os.environ["STREAMLIT_WATCHER_TYPE"] = "none"
 
+import asyncio
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
+
 import streamlit as st
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
