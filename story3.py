@@ -1,3 +1,6 @@
+import os
+os.environ["STREAMLIT_WATCH_USE_POLLING"] = "true"
+
 import streamlit as st
 st.set_page_config(page_title="AI Story Generator", layout="centered")
 
