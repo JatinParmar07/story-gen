@@ -3,9 +3,16 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
 # Load model and tokenizer
-model_name = "gpt2-medium"
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+@st.cache_resource
+def load_model():
+    model_name = "gpt2" 
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    return tokenizer, model
+
+tokenizer, model = load_model()
 
 # Ensure pad_token is defined
 if tokenizer.pad_token is None:
