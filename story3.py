@@ -7,8 +7,7 @@ def load_model():
     model_name = "gpt2-medium"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name)
-    
-    # Ensure pad_token is defined
+
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
@@ -62,7 +61,6 @@ if generate and user_input.strip():
         selected_index = st.selectbox("Choose a story to download", [f"Story {i+1}" for i in range(len(story_options))])
         selected_story = story_options[int(selected_index.split()[-1]) - 1]
 
-        # Download button
         st.download_button(
             label="💾 Download Selected Story",
             data=selected_story,
