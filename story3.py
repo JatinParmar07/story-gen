@@ -2,10 +2,9 @@ import streamlit as st
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 
-
 @st.cache_resource
 def load_model():
-    model_name = "gpt2-medium" 
+    model_name = "gpt2-medium"
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name)
     if tokenizer.pad_token is None:
@@ -45,8 +44,7 @@ if st.button("Generate Story ✨") and user_input.strip():
                 no_repeat_ngram_size=2,
                 num_return_sequences=3,
             )
-
-        st.markdown("### 📝 Generated Stories")
+            
         story_options = []
         for i, output in enumerate(outputs):
             story = tokenizer.decode(output, skip_special_tokens=True)
@@ -56,17 +54,9 @@ if st.button("Generate Story ✨") and user_input.strip():
             with st.expander(f"Story {i+1}"):
                 st.write(story_text)
 
-        # selected_index = st.selectbox("Choose a story to download", [f"Story {i+1}" for i in range(len(story_options))])
-        # selected_story = story_options[int(selected_index.split()[-1]) - 1]
+        st.session_state["story_options"] = story_options
 
-        # st.download_button(
-        #     label="💾 Download Selected Story",
-        #     data=selected_story,
-        #     file_name="generated_story.txt",
-        #     mime="text/plain"
-        # )
-
-if "story_options" in st.session_state:
+elif st.session_state.get("story_options"):
     st.markdown("### 📝 Generated Stories")
     for i, story_text in enumerate(st.session_state["story_options"]):
         with st.expander(f"Story {i+1}"):
@@ -85,7 +75,6 @@ if "story_options" in st.session_state:
         file_name="generated_story.txt",
         mime="text/plain"
     )
-
 
 elif user_input.strip() == "":
     st.warning("Please enter the beginning of your story to continue.")
