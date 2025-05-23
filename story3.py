@@ -66,25 +66,25 @@ if st.button("Generate Story ✨") and user_input.strip():
         #     mime="text/plain"
         # )
 
-        if "story_options" in st.session_state:
-            st.markdown("### 📝 Generated Stories")
-            for i, story_text in enumerate(st.session_state["story_options"]):
-                with st.expander(f"Story {i+1}"):
-                    st.write(story_text)
-        
-            selected_index = st.selectbox(
-                "Choose a story to download",
-                [f"Story {i+1}" for i in range(len(st.session_state["story_options"]))],
-                key="story_select"
-            )
-            selected_story = st.session_state["story_options"][int(selected_index.split()[-1]) - 1]
-        
-            st.download_button(
-                label="💾 Download Selected Story",
-                data=selected_story,
-                file_name="generated_story.txt",
-                mime="text/plain"
-            )
+    if "story_options" in st.session_state:
+        st.markdown("### 📝 Generated Stories")
+        for i, story_text in enumerate(st.session_state["story_options"]):
+            with st.expander(f"Story {i+1}"):
+                st.write(story_text)
+    
+        selected_index = st.selectbox(
+            "Choose a story to download",
+            [f"Story {i+1}" for i in range(len(st.session_state["story_options"]))],
+            key="story_select"
+        )
+        selected_story = st.session_state["story_options"][int(selected_index.split()[-1]) - 1]
+    
+        st.download_button(
+            label="💾 Download Selected Story",
+            data=selected_story,
+            file_name="generated_story.txt",
+            mime="text/plain"
+        )
 
 
 elif user_input.strip() == "":
